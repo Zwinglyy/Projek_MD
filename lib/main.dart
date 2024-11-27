@@ -1,3 +1,4 @@
+import 'package:emisi_md/Home.dart';
 import 'package:emisi_md/authedPage.dart';
 import 'package:emisi_md/userManagement/registration_page.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class ExpenseMonitoringApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         debugShowCheckedModeBanner: false,
-        home: LoginPage()
+        home: HomePage()
     );
   }
 }
