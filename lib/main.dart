@@ -1,14 +1,12 @@
-import 'package:emisi_md/Home.dart';
-import 'package:emisi_md/authedPage.dart';
-import 'package:emisi_md/userManagement/registration_page.dart';
+
+import 'package:emisi_md/Splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:emisi_md/userManagement/login_page.dart';
 
 void main() {
-  runApp(ExpenseMonitoringApp());
+  runApp(CarbonMonitoringApp());
 }
 
-class ExpenseMonitoringApp extends StatelessWidget {
+class CarbonMonitoringApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,7 +15,7 @@ class ExpenseMonitoringApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         debugShowCheckedModeBanner: false,
-        home: HomePage()
+        home: SplashScreen(),
     );
   }
 }

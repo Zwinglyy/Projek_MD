@@ -43,6 +43,8 @@ dependencies:
   url_launcher: ^6.3.1
   searchfield: ^1.1.7
   material_design_icons_flutter: ^7.0.7296
+  fluttertoast: ^8.2.8
+  page_transition: ^2.1.0
 
 
 dev_dependencies:
