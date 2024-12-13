@@ -15,27 +15,6 @@ class HomePage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // Bagian atas (Header)
-          Container(
-            height: 150,
-            decoration: BoxDecoration(
-              color: Colors.green.shade400,
-              borderRadius: const BorderRadius.vertical(
-                bottom: Radius.circular(50),
-              ),
-            ),
-            child: Center(
-              child: Text(
-                'Lacak Penggunaan Karbon Anda',
-                style: TextStyle(
-                  fontSize: screenWidth < 600 ? 18 : 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
           const SizedBox(height: 20),
           // Grid icon dengan Responsive Layout
           Expanded(
@@ -61,8 +40,8 @@ class HomePage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: screenWidth < 600 ? 3 : 5,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20,
+                      crossAxisSpacing: 0,
+                      mainAxisSpacing: 0,
                     ),
                     itemCount: _transportationIcons.length,
                     itemBuilder: (context, index) {
@@ -91,8 +70,8 @@ class HomePage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: screenWidth < 600 ? 3 : 5,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20,
+                      crossAxisSpacing: 0,
+                      mainAxisSpacing: 0,
                     ),
                     itemCount: _electricityIcons.length,
                     itemBuilder: (context, index) {
