@@ -1,4 +1,5 @@
 
+import 'package:emisi_md/Home.dart';
 import 'package:emisi_md/Splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class CarbonMonitoringApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
+        home: HomePage(),
     );
   }
 }

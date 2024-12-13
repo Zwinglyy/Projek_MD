@@ -39,27 +39,71 @@ class HomePage extends StatelessWidget {
           const SizedBox(height: 20),
           // Grid icon dengan Responsive Layout
           Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                // Hitung jumlah kolom berdasarkan lebar layar
-                int crossAxisCount = screenWidth < 600 ? 3 : 5;
-
-                return GridView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Kategori Transportasi
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      "Transportasi",
+                      style: TextStyle(
+                        fontSize: screenWidth < 600 ? 16 : 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                  itemCount: _iconCategories.length,
-                  itemBuilder: (context, index) {
-                    return _buildCategoryIcon(
-                      _iconCategories[index]['icon'] as IconData,
-                      _iconCategories[index]['label'] as String,
-                    );
-                  },
-                );
-              },
+                  const SizedBox(height: 10),
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: screenWidth < 600 ? 3 : 5,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
+                    ),
+                    itemCount: _transportationIcons.length,
+                    itemBuilder: (context, index) {
+                      return _buildCategoryIcon(
+                        _transportationIcons[index]['icon'] as IconData,
+                        _transportationIcons[index]['label'] as String,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  // Kategori Listrik
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      "Listrik",
+                      style: TextStyle(
+                        fontSize: screenWidth < 600 ? 16 : 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: screenWidth < 600 ? 3 : 5,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
+                    ),
+                    itemCount: _electricityIcons.length,
+                    itemBuilder: (context, index) {
+                      return _buildCategoryIcon(
+                        _electricityIcons[index]['icon'] as IconData,
+                        _electricityIcons[index]['label'] as String,
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
           // Card bagian bawah
@@ -155,16 +199,27 @@ class HomePage extends StatelessWidget {
   }
 }
 
-// Data kategori icon
-final List<Map<String, dynamic>> _iconCategories = [
-  {'icon': MdiIcons.car, 'label': 'Kendaraan'},
+// Data kategori ikon transportasi
+final List<Map<String, dynamic>> _transportationIcons = [
+  {'icon': MdiIcons.car, 'label': 'Mobil'},
+  {'icon': MdiIcons.motorbike, 'label': 'Motor'},
+  {'icon': MdiIcons.bus, 'label': 'Big Bus'},
+  {'icon': MdiIcons.busClock, 'label': 'Medium Bus'},
+  {'icon': MdiIcons.busArticulatedEnd, 'label': 'Mini Bus'},
+  {'icon': MdiIcons.taxi, 'label': 'Taxi'},
+  {'icon': MdiIcons.truck, 'label': 'Big Truck'},
+  {'icon': MdiIcons.truckDelivery, 'label': 'Medium Truck'},
+  {'icon': MdiIcons.truckTrailer, 'label': 'Mini Truck'},
+  {'icon': MdiIcons.train, 'label': 'Train'},
+  {'icon': MdiIcons.subway, 'label': 'MRT-Train'},
+];
+
+// Data kategori ikon listrik
+final List<Map<String, dynamic>> _electricityIcons = [
   {'icon': MdiIcons.fridgeOutline, 'label': 'Kulkas'},
   {'icon': MdiIcons.airConditioner, 'label': 'AC'},
   {'icon': MdiIcons.lightbulbOutline, 'label': 'Lampu'},
   {'icon': MdiIcons.fire, 'label': 'Gas'},
-  {'icon': MdiIcons.train, 'label': 'Transportasi Umum'},
-  {'icon': MdiIcons.factoryIcon, 'label': 'Industri'},
-  {'icon': MdiIcons.tree, 'label': 'Penghijauan'},
 ];
 
 void main() => runApp(MaterialApp(
