@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  final String userId;
+  HomePage({required this.userId});
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -166,8 +174,3 @@ final List<Map<String, dynamic>> _iconCategories = [
   {'icon': MdiIcons.factoryIcon, 'label': 'Industri'},
   {'icon': MdiIcons.tree, 'label': 'Penghijauan'},
 ];
-
-void main() => runApp(MaterialApp(
-  home: HomePage(),
-  debugShowCheckedModeBanner: false,
-));
