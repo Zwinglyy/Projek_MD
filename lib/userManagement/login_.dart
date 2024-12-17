@@ -2,8 +2,8 @@ import 'package:emisi_md/userManagement/resetPasswd_page_.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:emisi_md/api_service_.dart';
-import 'package:emisi_md/authedPage.dart';
-import 'package:emisi_md/userManagement/registration_page.dart';
+import 'package:emisi_md/authedPage_.dart';
+import 'package:emisi_md/userManagement/registration_.dart';
 import 'package:page_transition/page_transition.dart';
 
 class LoginPage extends StatefulWidget {

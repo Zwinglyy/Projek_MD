@@ -1,6 +1,4 @@
-
-import 'package:emisi_md/Home.dart';
-import 'package:emisi_md/Splash_screen.dart';
+import 'package:emisi_md/userManagement/login_.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,12 +9,12 @@ class CarbonMonitoringApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'CARBON CALCULATOR',
+        title: 'Monitor Carbon',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
         debugShowCheckedModeBanner: false,
-        home: HomePage(),
+        home: LoginPage(),
     );
   }
 }
