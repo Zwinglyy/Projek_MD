@@ -31,7 +31,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   void initState() {
     super.initState();
     _confirmPasswordController.addListener(_checkPasswordMatch);
-    _loadQuestions(); 
+    _loadQuestions();
   }
 
   @override
@@ -76,7 +76,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           children: [
             SizedBox(height: 20),
             Text(
-              'Daftar Akun Baru',
+              'Register New Account',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 24,
@@ -91,10 +91,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildTextField(
-                    label: 'Nama Pengguna',
+                    label: 'Username',
                     onSaved: (value) => userName = value!,
                     validator: (value) =>
-                        value!.isEmpty ? 'Silakan masukan Nama Pengguna' : null,
+                        value!.isEmpty ? 'Please enter User Name' : null,
                   ),
                   SizedBox(height: 12),
                   _buildPasswordField(),
@@ -102,19 +102,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   _buildConfirmPasswordField(),
                   SizedBox(height: 12),
                   _buildTextField(
-                    label: 'Nomor Telepon',
+                    label: 'Phone number',
                     keyboardType: TextInputType.phone,
                     onSaved: (value) => phoneNumber = value!,
                     validator: (value) =>
-                        value!.isEmpty ? 'Silakan masukan Nomor Telepon' : null,
+                        value!.isEmpty ? 'Please enter Telephone Number' : null,
                   ),
                   SizedBox(height: 12),
                   _buildTextField(
-                    label: 'Alamat tinggal',
+                    label: 'address',
                     maxLines: 3,
                     onSaved: (value) => address = value!,
                     validator: (value) =>
-                        value!.isEmpty ? 'Silakan masukan Alamat tinggal Anda' : null,
+                        value!.isEmpty ? 'Please enter your address' : null,
                   ),
                   SizedBox(height: 12),
                   _buildPQDropdown(),
@@ -156,7 +156,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return TextFormField(
       controller: _passwordController,
       decoration: InputDecoration(
-        labelText: 'Kata Sandi',
+        labelText: 'Password',
         border: OutlineInputBorder(),
         suffixIcon: IconButton(
           icon: Icon(
@@ -171,7 +171,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       ),
       obscureText: !_isPasswordVisible,
       validator: (value) =>
-          value!.isEmpty ? 'Silahkan masukan kata sandi Anda' : null,
+          value!.isEmpty ? 'Please enter your password' : null,
     );
   }
 
@@ -179,7 +179,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return TextFormField(
       controller: _confirmPasswordController,
       decoration: InputDecoration(
-        labelText: 'Konfirmasi Kata Sandi',
+        labelText: 'Confirm Password',
         border: OutlineInputBorder(),
         suffixIcon: IconButton(
           icon: Icon(
@@ -194,8 +194,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
       ),
       obscureText: !_isConfirmPasswordVisible,
       validator: (value) {
-        if (value!.isEmpty) return 'Silahkan konfirmasi kata sandi Anda';
-        if (!_isPasswordMatching) return 'Kata sandi tidak cocok';
+        if (value!.isEmpty) return 'Please confirm your password';
+        if (!_isPasswordMatching) return 'Passwords do not match';
         return null;
       },
     );
@@ -209,7 +209,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         isExpanded: true, // Menghindari teks terpotong
         value: selectedPQId,
         decoration: InputDecoration(
-          labelText: 'Pilih Pertanyaan Keamanan',
+          labelText: 'Select Security Questions',
           border: OutlineInputBorder(),
           contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0), // Tinggi field diperbesar
         ),
@@ -230,18 +230,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
           });
         },
         validator: (value) =>
-        value == null ? 'Silakan pilih pertanyaan keamanan' : null,
+        value == null ? 'Please select a security question' : null,
       ),
     );
   }
 
   Widget _buildPQAnswerField() {
     return _buildTextField(
-                    label: 'Jawaban Anda',
+                    label: 'Your answer',
                     maxLines: 3,
                     onSaved: (value) => pqAnswer = value!,
                     validator: (value) =>
-                        value!.isEmpty ? 'Silakan masukkan jawaban Anda' : null,
+                        value!.isEmpty ? 'Please enter your answer' : null,
                   );
   }
 
@@ -259,7 +259,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             onPressed: _register,
             child: Center(
               child: Text(
-                'Daftar',
+                'register',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
             ),
@@ -271,7 +271,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Sudah memiliki akun?',
+          'Already have an account?',
           style: TextStyle(color: Colors.black54),
         ),
         TextButton(
@@ -282,7 +282,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             );
           },
           child: Text(
-            'Masuk',
+            'Log in ',
             style: TextStyle(color: Colors.blueAccent),
           ),
         ),

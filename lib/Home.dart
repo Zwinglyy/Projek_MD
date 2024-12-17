@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'transportation_page.dart';
+import 'electricity_page.dart';
 
 class HomePage extends StatelessWidget {
   final String userId;
@@ -24,6 +26,8 @@ class HomePage extends StatelessWidget {
                     title: "Transportation",
                     icons: _transportationIcons,
                     screenWidth: screenWidth,
+                    context: context,
+                    targetPage: TransportationPage(),
                   ),
                   const SizedBox(height: 20),
                   // Kategori Listrik
@@ -31,6 +35,8 @@ class HomePage extends StatelessWidget {
                     title: "Electricity",
                     icons: _electricityIcons,
                     screenWidth: screenWidth,
+                    context: context,
+                    targetPage: ElectricityPage(),
                   ),
                 ],
               ),
@@ -47,6 +53,8 @@ class HomePage extends StatelessWidget {
     required String title,
     required List<Map<String, dynamic>> icons,
     required double screenWidth,
+    required BuildContext context,
+    required Widget targetPage,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,6 +84,9 @@ class HomePage extends StatelessWidget {
             return _buildCategoryIcon(
               icons[index]['icon'] as IconData,
               icons[index]['label'] as String,
+              screenWidth,
+              context,
+              targetPage,
             );
           },
         ),
@@ -135,21 +146,38 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryIcon(IconData icon, String label) {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: Colors.green.shade100,
-          child: Icon(icon, color: Colors.green.shade700, size: 30),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 12),
-        ),
-      ],
+  Widget _buildCategoryIcon(
+      IconData icon,
+      String label,
+      double screenWidth,
+      BuildContext context,
+      Widget targetPage,
+      ) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => targetPage),
+        );
+      },
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: Colors.green.shade100,
+            child: Icon(icon, color: Colors.green.shade700, size: 30),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: screenWidth < 600 ? 12 : 14, // Ukuran font responsif
+              fontWeight: FontWeight.w500, // Kontrol ketebalan teks
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

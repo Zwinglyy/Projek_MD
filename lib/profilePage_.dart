@@ -15,7 +15,7 @@ class ProfilePage extends StatelessWidget {
           'Profil Pengguna',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Color(0xFF007BFF),
+        backgroundColor: Colors.green,
         centerTitle: true,
       ),
       body: Padding(

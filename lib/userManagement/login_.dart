@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Selamat Datang di MonMon',
+                  'Welcome to MoCa',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Masuk untuk melanjutkan',
+                  'Login to continue',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black54,
@@ -107,17 +107,17 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         TextFormField(
                           decoration: InputDecoration(
-                            labelText: 'Nomor Telepon',
+                            labelText: 'Phone number',
                             prefixIcon: Icon(Icons.phone),
                           ),
                           onSaved: (value) => phoneNumber = value!,
                           validator: (value) =>
-                          value!.isEmpty ? 'Masukkan nomor telepon Anda' : null,
+                          value!.isEmpty ? 'Enter your phone number' : null,
                         ),
                         SizedBox(height: 15),
                         TextFormField(
                           decoration: InputDecoration(
-                            labelText: 'Kata Sandi',
+                            labelText: 'Password',
                             prefixIcon: Icon(Icons.lock),
                             suffixIcon: IconButton(
                               icon: Icon(
@@ -135,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                           obscureText: !_isPasswordVisible,
                           onSaved: (value) => userPasswd = value!,
                           validator: (value) =>
-                          value!.isEmpty ? 'Masukkan kata sandi Anda' : null,
+                          value!.isEmpty ? 'Enter your password' : null,
                         ),
                         SizedBox(height: 20),
                         _isLoading
@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             onPressed: _handleLogin,
                             child: Text(
-                              'Masuk',
+                              'Enter',
                               style: TextStyle(
                                 fontSize: 16,
                               ),
@@ -163,28 +163,28 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ResetPasswordPage()),
-                          );
-                        },
-                        child: Text(
-                          'Lupa Password?',
-                          style: TextStyle(color: Colors.blueAccent),
-                        ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ResetPasswordPage()),
+                        );
+                      },
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(color: Colors.blueAccent),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
                 SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Belum punya akun?',
+                    Text('Dont have an account yet?',
                         style: TextStyle(color: Colors.black54)),
                     TextButton(
                       onPressed: () {
@@ -199,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                         );
                       },
                       child: Text(
-                        'Daftar',
+                        'register',
                         style: TextStyle(color: Colors.blueAccent),
                       ),
                     ),
@@ -241,7 +241,7 @@ class _LoginPageState extends State<LoginPage> {
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Login Gagal: ${response['msg']}')),
+            SnackBar(content: Text('Login FAIL : ${response['msg']}')),
           );
         }
       } catch (e) {

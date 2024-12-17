@@ -25,7 +25,7 @@ class _AuthedPageState extends State<AuthedPage> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.green,
         actions: [
           IconButton(
             icon: const Icon(Icons.account_circle),
