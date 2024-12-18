@@ -4,25 +4,9 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   static const String baseUrl =
-      'https://script.google.com/macros/s/AKfycbxbEMur-PKA00sZPVh3yPSQ46Y0VbfYAntltATRd2Bo1-fp9rj3dmR0t8J0s_wJAaiQ/exec';
+      'https://script.google.com/macros/s/AKfycbzAWtVctLogYU0kPRPrrjZAZQuq3O90TxoDZqA_wdMCNskNcf_ZCn_mbuMxFISo5YW0/exec';
 
-  static const String getIncomeAction = 'getIncome';
-  static const String getExpenseAction = 'getExpense';
-  static const String getUsersAction = 'getUsers';
-  static const String getProductsAction = 'getProducts';
-  static const String getServicesAction = 'getServices';
-  static const String getDashboardAction = 'getDashboard';
-  static const String registerUserAction = 'registerUser';
-  static const String addIncomeAction = 'addIncome';
-  static const String addIncomeTypeAction = 'addIncomeType';
-  static const String addExpenseAction = 'addExpense';
-  static const String addExpenseTypeAction = 'addExpenseType';
-  static const String updateExpenseAmountAction = 'updateExpenseAmount';
-  static const String updateIncomeQuantityAction = 'updateIncomeQuantity';
-  static const String getExpenseTypesAction = 'getExpenseTypes';
-  static const String getIncomeTypesAction = 'getIncomeTypes';
   static const String logoutUserAction = 'logoutUser';
-  static const String filterTransactionsAction = 'filterTransactions';
 
   Future<Map<String, dynamic>> postCarbonProduced({
     required String dateTime,
@@ -43,9 +27,9 @@ class ApiService {
       };
 
       if (carbonProducedTypeId == 'CPT-ElectricPower' && duration != null) {
-        body['duration'] = duration.toString();
+        body['duration'] = duration.toDouble();
       } else if (carbonProducedTypeId == 'CPT-Transport' && distance != null) {
-        body['distance'] = distance.toString();
+        body['distance'] = distance.toDouble();
       }
 
       final response = await http.post(

@@ -5,6 +5,7 @@ import 'electricity_page.dart';
 
 class HomePage extends StatelessWidget {
   final String userId;
+
   const HomePage({Key? key, required this.userId}) : super(key: key);
 
   @override
@@ -21,28 +22,50 @@ class HomePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Kategori Transportasi
+
                   _buildCategorySection(
                     title: "Transportation",
                     icons: _transportationIcons,
                     screenWidth: screenWidth,
                     context: context,
-                    targetPage: TransportationPage(),
+                    onItemTap: (icon) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TransportationPage(
+                            title: icon['label'],
+                            transportId: icon['id'],
+                            userId:userId,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 20),
-                  // Kategori Listrik
+
                   _buildCategorySection(
                     title: "Electricity",
                     icons: _electricityIcons,
                     screenWidth: screenWidth,
                     context: context,
-                    targetPage: ElectricityPage(),
+                    onItemTap: (icon) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ElectricityPage(
+                            title: icon['label'],
+                            electricityId: icon['id'],
+                            userId:userId,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
             ),
           ),
-          // Card bagian bawah
+
           _buildSummaryCard(),
         ],
       ),
@@ -54,7 +77,7 @@ class HomePage extends StatelessWidget {
     required List<Map<String, dynamic>> icons,
     required double screenWidth,
     required BuildContext context,
-    required Widget targetPage,
+    required Function(Map<String, dynamic>) onItemTap,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,12 +104,13 @@ class HomePage extends StatelessWidget {
           ),
           itemCount: icons.length,
           itemBuilder: (context, index) {
-            return _buildCategoryIcon(
-              icons[index]['icon'] as IconData,
-              icons[index]['label'] as String,
-              screenWidth,
-              context,
-              targetPage,
+            return GestureDetector(
+              onTap: () => onItemTap(icons[index]),
+              child: _buildCategoryIcon(
+                icons[index]['icon'] as IconData,
+                icons[index]['label'] as String,
+                screenWidth,
+              ),
             );
           },
         ),
@@ -146,61 +170,44 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryIcon(
-      IconData icon,
-      String label,
-      double screenWidth,
-      BuildContext context,
-      Widget targetPage,
-      ) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => targetPage),
-        );
-      },
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.green.shade100,
-            child: Icon(icon, color: Colors.green.shade700, size: 30),
+  Widget _buildCategoryIcon(IconData icon, String label, double screenWidth) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 30,
+          backgroundColor: Colors.green.shade100,
+          child: Icon(icon, color: Colors.green.shade700, size: 30),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: screenWidth < 600 ? 12 : 14,
+            fontWeight: FontWeight.w500,
           ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: screenWidth < 600 ? 12 : 14, // Ukuran font responsif
-              fontWeight: FontWeight.w500, // Kontrol ketebalan teks
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
 
 // Data kategori ikon transportasi
 final List<Map<String, dynamic>> _transportationIcons = [
-  {'icon': MdiIcons.car, 'label': 'Car'},
-  {'icon': MdiIcons.motorbike, 'label': 'Motorcycle'},
-  {'icon': MdiIcons.bus, 'label': 'Big Bus'},
-  {'icon': MdiIcons.busClock, 'label': 'Medium Bus'},
-  {'icon': MdiIcons.busArticulatedEnd, 'label': 'Mini Bus'},
-  {'icon': MdiIcons.taxi, 'label': 'Taxi'},
-  {'icon': MdiIcons.truck, 'label': 'Big Truck'},
-  {'icon': MdiIcons.truckDelivery, 'label': 'Medium Truck'},
-  {'icon': MdiIcons.truckTrailer, 'label': 'Mini Truck'},
-  {'icon': MdiIcons.train, 'label': 'Train'},
-  {'icon': MdiIcons.subway, 'label': 'MRT-Train'},
+  {'icon': MdiIcons.car, 'label': 'Passenger Car', 'id': 'CPT-Transport-1'},
+  {'icon': MdiIcons.motorbike, 'label': 'Motorcycle', 'id': 'CPT-Transport-2'},
+  {'icon': MdiIcons.bus, 'label': 'Bus TransJakarta', 'id': 'CPT-Transport-3'},
+  {'icon': MdiIcons.taxi, 'label': 'Taxi 4 People', 'id': 'CPT-Transport-4'},
+  {'icon': MdiIcons.taxi, 'label': 'Taxi 7 People', 'id': 'CPT-Transport-5'},
+  {'icon': MdiIcons.train, 'label': 'Train', 'id': 'CPT-Transport-6'},
+  {'icon': MdiIcons.subway, 'label': 'MRT-Train', 'id': 'CPT-Transport-7'},
 ];
 
 // Data kategori ikon listrik
 final List<Map<String, dynamic>> _electricityIcons = [
-  {'icon': MdiIcons.fridgeOutline, 'label': 'Refrigerator'},
-  {'icon': MdiIcons.airConditioner, 'label': 'Air Conditioner'},
-  {'icon': MdiIcons.lightbulbOutline, 'label': 'Lamps'},
-  {'icon': MdiIcons.cellphoneCharging, 'label': 'Phone Charger'},
+  {'icon': MdiIcons.lightbulbOutline, 'label': 'Lamps', 'id': 'CPT-ElectricPower-1'},
+  {'icon': MdiIcons.fridgeOutline, 'label': 'Refrigerator', 'id': 'CPT-ElectricPower-2'},
+  {'icon': MdiIcons.cellphoneCharging, 'label': 'Phone Charger', 'id': 'CPT-ElectricPower-3'},
+  {'icon': MdiIcons.airConditioner, 'label': 'Air Conditioner', 'id': 'CPT-ElectricPower-4'},
+  {'icon': MdiIcons.fan, 'label': 'Fan', 'id': 'CPT-ElectricPower-5'},
 ];
