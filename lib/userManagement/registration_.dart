@@ -27,7 +27,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   List<Map<String, dynamic>> questions = [];
   Timer? _gradientTimer;
-  List<Color> gradientColors = [Color(0xFF3DD598), Colors.white];
+  List<Color> gradientColors = [Color(0xFF3DD598), Color(0xFF83EAF1)];
 
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
@@ -204,7 +204,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       },
                       child: Text('Log in',
                           style: GoogleFonts.poppins(
-                        color: Colors.black54,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
