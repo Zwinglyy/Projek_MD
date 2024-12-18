@@ -2,11 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'transportation_page.dart';
 import 'electricity_page.dart';
+import 'package:emisi_md/api_service_.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final String userId;
 
   const HomePage({Key? key, required this.userId}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late ApiService apiService;
+  Map<String, dynamic>? summaryData;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    apiService = ApiService();
+    _fetchSummaryData();
+  }
+
+  _fetchSummaryData() async {
+    try {
+      final data = await apiService.getTotalEmisiForUser(userId: widget.userId);
+      setState(() {
+        summaryData = data;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print("Error: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +66,14 @@ class HomePage extends StatelessWidget {
                           builder: (context) => TransportationPage(
                             title: icon['label'],
                             transportId: icon['id'],
-                            userId: userId,
+                            userId: widget.userId,
                           ),
                         ),
                       );
                     },
                   ),
                   const SizedBox(height: 20),
+
                   _buildCategorySection(
                     title: "Electricity",
                     icons: _electricityIcons,
@@ -53,7 +86,7 @@ class HomePage extends StatelessWidget {
                           builder: (context) => ElectricityPage(
                             title: icon['label'],
                             electricityId: icon['id'],
-                            userId: userId,
+                            userId: widget.userId,
                           ),
                         ),
                       );
@@ -69,6 +102,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  // Fungsi untuk membangun section kategori
   Widget _buildCategorySection({
     required String title,
     required List<Map<String, dynamic>> icons,
@@ -86,7 +120,6 @@ class HomePage extends StatelessWidget {
             style: TextStyle(
               fontSize: screenWidth < 600 ? 16 : 20,
               fontWeight: FontWeight.bold,
-              color: Colors.green.shade800,
             ),
           ),
         ),
@@ -97,8 +130,8 @@ class HomePage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: screenWidth < 600 ? 3 : 5,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 0,
           ),
           itemCount: icons.length,
           itemBuilder: (context, index) {
@@ -116,6 +149,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  // Fungsi untuk membangun summary card
   Widget _buildSummaryCard() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -140,30 +174,49 @@ class HomePage extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
-              color: Colors.green,
             ),
           ),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
-              Text("(Category)", style: TextStyle(fontSize: 14)),
+              Text("Total Emission all Time", style: TextStyle(fontSize: 14)),
               Text("(Total Emissions)", style: TextStyle(fontSize: 14)),
+            ],
+          ),
+          const SizedBox(height: 10),
+          isLoading
+              ? const CircularProgressIndicator()
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text("Total Emissions", style: TextStyle(fontSize: 14)),
+                    Text(
+                      summaryData?['totalCarbonEmission']?.toString() ?? 'N/A',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ],
+                ),
+          const SizedBox(height: 10),
+          // Total Distance and Total Duration
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("Total Distance", style: TextStyle(fontSize: 14)),
+              Text(
+                summaryData?['totalDistance']?.toString() ?? 'N/A',
+                style: const TextStyle(fontSize: 14),
+              ),
             ],
           ),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Task", style: TextStyle(fontSize: 14)),
-              ElevatedButton(
-                onPressed: () {
-                  // Tambahkan aksi untuk button
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                ),
-                child: const Text("Details"),
+              const Text("Total Duration", style: TextStyle(fontSize: 14)),
+              Text(
+                summaryData?['totalDuration']?.toString() ?? 'N/A',
+                style: const TextStyle(fontSize: 14),
               ),
             ],
           ),
@@ -172,9 +225,9 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  // Fungsi untuk membangun ikon kategori
   Widget _buildCategoryIcon(IconData icon, String label, double screenWidth) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CircleAvatar(
           radius: 30,
@@ -188,7 +241,6 @@ class HomePage extends StatelessWidget {
           style: TextStyle(
             fontSize: screenWidth < 600 ? 12 : 14,
             fontWeight: FontWeight.w500,
-            color: Colors.green.shade800,
           ),
         ),
       ],

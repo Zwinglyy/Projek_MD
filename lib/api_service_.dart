@@ -4,11 +4,12 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   static const String baseUrl =
-      'https://script.google.com/macros/s/AKfycbzAWtVctLogYU0kPRPrrjZAZQuq3O90TxoDZqA_wdMCNskNcf_ZCn_mbuMxFISo5YW0/exec';
+      'https://script.google.com/macros/s/AKfycbxTVAUFGkd0FrRmWlxJVoaWo-sTwcAhAcVZgyUmjR3FvAlWZy1pPzBGVbjZR1EjxieA/exec';
 
   static const String logoutUserAction = 'logoutUser';
 
   Future<Map<String, dynamic>> postCarbonProduced({
+    required String action,
     required String dateTime,
     required String userId,
     required String carbonProducedTypeId,
@@ -18,7 +19,8 @@ class ApiService {
     double? distance,
   }) async {
     try {
-      Map<String, dynamic> body = {
+      final Map<String, String> queryParameters = {
+        'action': action,
         'dateTime': dateTime,
         'userId': userId,
         'carbonProducedTypeId': carbonProducedTypeId,
@@ -27,26 +29,104 @@ class ApiService {
       };
 
       if (carbonProducedTypeId == 'CPT-ElectricPower' && duration != null) {
-        body['duration'] = duration.toDouble();
+        queryParameters['duration'] = duration.toString();
       } else if (carbonProducedTypeId == 'CPT-Transport' && distance != null) {
-        body['distance'] = distance.toDouble();
+        queryParameters['distance'] = distance.toString();
       }
 
-      final response = await http.post(
-        Uri.parse(baseUrl),
-        body: body,
-      );
+      // Membentuk URI dengan queryParameters
+      final Uri uri =
+          Uri.parse(baseUrl).replace(queryParameters: queryParameters);
 
-      // Check if the response status is successful
+      // Melakukan POST request
+      final response = await http.post(uri);
+
       if (response.statusCode == 200) {
-        // Parse the JSON response
-        Map<String, dynamic> result = json.decode(response.body);
-        return result;
+        try {
+          // Parsing hasil response JSON
+          final data = jsonDecode(response.body);
+          return data;
+        } catch (e) {
+          throw Exception('Error decoding response: $e');
+        }
       } else {
-        throw Exception('Failed to post data: ${response.statusCode}');
+        throw Exception(
+            'Failed to post carbon produced data. Status code: ${response.statusCode}. Reason: ${response.reasonPhrase}. Headers: ${response.headers}');
       }
     } catch (error) {
-      // Return error message
+      // Mengembalikan error dalam format map
+      return {'status': 'FAILED', 'msg': error.toString()};
+    }
+  }
+
+  Future<Map<String, dynamic>> getCarbonProducedType() async {
+    try {
+      final response =
+          await http.get(Uri.parse(baseUrl).replace(queryParameters: {
+            'action': 'getCarbonProducedType',
+            }));
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception(
+            'Failed to fetch Carbon Produced Type. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      return {'status': 'FAILED', 'msg': error.toString()};
+    }
+  }
+
+  // Fungsi untuk mengambil data CPT-ElectricPower
+  Future<Map<String, dynamic>> getCPTElectricPower() async {
+    try {
+      final response =
+          await http.get(Uri.parse(baseUrl).replace(queryParameters: {
+            'action': 'getCPTElectricPower',
+            }));
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception(
+            'Failed to fetch CPT-ElectricPower. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      return {'status': 'FAILED', 'msg': error.toString()};
+    }
+  }
+
+  // Fungsi untuk mengambil data CPT-Transport
+  Future<Map<String, dynamic>> getCPTTransport() async {
+    try {
+      final response = await http.get(Uri.parse(baseUrl).replace(queryParameters: {
+        'action': 'getCPT_Transport',
+      }));
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception(
+            'Failed to fetch CPT-Transport. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      return {'status': 'FAILED', 'msg': error.toString()};
+    }
+  }
+
+  // Fungsi untuk mengambil data CarbonProduced berdasarkan userId
+  Future<Map<String, dynamic>> getCarbonProduced(String userId) async {
+    try {
+      final Uri uri = Uri.parse(baseUrl).replace(queryParameters: {
+        'action': 'getCarbonProduced',
+        'userId': userId,
+      });
+
+      final response = await http.get(uri);
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception(
+            'Failed to fetch Carbon Produced. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
       return {'status': 'FAILED', 'msg': error.toString()};
     }
   }
@@ -59,6 +139,32 @@ class ApiService {
     _handleResponse(response);
   }
 
+  Future<Map<String, dynamic>> getTotalEmisiForUser({
+    required String userId,
+  }) async {
+    final Uri uri = Uri.parse(baseUrl).replace(queryParameters: {
+      'action':'getTotalEmisiForUser',
+      'userId': userId,
+    });
+
+    final response = await http.get(uri);
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      try {
+        // Decode the response body
+        final data = jsonDecode(response.body);
+        print(data);
+        return data;
+      } catch (e) {
+        throw Exception('Error decoding response: $e');
+      }
+    } else {
+      throw Exception(
+          'Failed to load total emission. Status code: ${response.statusCode}. Reason: ${response.reasonPhrase}. Headers: ${response.headers}');
+    }
+  }
+
 // GET PERSONAL QUESTION
   Future<List<Map<String, String>>> getQuestions() async {
     try {
@@ -68,7 +174,7 @@ class ApiService {
         return data
             .map((item) => {
                   'pqId':
-                      item['pqId']?.toString() ?? 'Unknown', // Default value
+                      item['pqId']?.toString() ?? 'Unknown',
                   'pqQuestion': item['pqQuestion']?.toString() ?? 'No Question',
                 })
             .toList();
@@ -323,5 +429,4 @@ class ApiService {
           'Failed to register user. Status code: ${response.statusCode}. Reason: ${response.reasonPhrase}. Headers: ${response.headers}');
     }
   }
-
 }

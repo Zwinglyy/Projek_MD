@@ -39,6 +39,7 @@ class _ElectricityPageState extends State<ElectricityPage> {
 
     try {
       final response = await _apiService.postCarbonProduced(
+        action: 'postCarbonProduced',
         dateTime: DateTime.now().toIso8601String(),
         userId: widget.userId,
         carbonProducedTypeId: "CPT-ElectricPower",

@@ -39,6 +39,7 @@ class _TransportationPageState extends State<TransportationPage> {
 
     try {
       final response = await _apiService.postCarbonProduced(
+        action: 'postCarbonProduced',
         dateTime: DateTime.now().toIso8601String(),
         userId: widget.userId,
         carbonProducedTypeId: "CPT-Transport",
