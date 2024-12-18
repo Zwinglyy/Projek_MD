@@ -1,10 +1,10 @@
-import 'package:emisi_md/userManagement/resetPasswd_page_.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:emisi_md/api_service_.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'resetPasswd_page_.dart';
+import 'registration_.dart';
 import 'package:emisi_md/authedPage_.dart';
-import 'package:emisi_md/userManagement/registration_.dart';
-import 'package:page_transition/page_transition.dart';
+import '../api_service_.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -19,102 +19,77 @@ class _LoginPageState extends State<LoginPage> {
   bool _isPasswordVisible = false;
   bool _isLoading = false;
 
-  // State variables for gradient animation
-  List<Color> gradientColors = [Color(0xFF3DD598), Colors.white];
-  Timer? _gradientTimer; // Reference for Timer
-
-  @override
-  void initState() {
-    super.initState();
-    _startGradientAnimation();
-  }
-
-  void _startGradientAnimation() {
-    _gradientTimer = Timer.periodic(Duration(seconds: 3), (timer) {
-      if (mounted) {
-        setState(() {
-          gradientColors = gradientColors.reversed.toList();
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _gradientTimer?.cancel(); // Stop Timer to prevent errors
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnimatedContainer(
-        duration: Duration(seconds: 3),
+      body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: gradientColors,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            colors: [Color(0xFF3DD598), Color(0xFF83EAF1)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Logo dengan animasi
                 Image.asset(
                   'image/logofull.png',
-                  width: 300,
-                  height: 300,
-                ),
-                SizedBox(height: 10),
+                  width: 200,
+                ).animate().fadeIn(duration: 1.seconds).scale(),
+                const SizedBox(height: 10),
                 Text(
-                  'Welcome to MoCa',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                  'Welcome Back!',
+                  style: GoogleFonts.poppins(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black54,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 8),
                 Text(
                   'Login to continue',
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                     fontSize: 16,
                     color: Colors.black54,
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
+
+                // Form Login
                 Container(
-                  padding: EdgeInsets.all(16),
+                  padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
+                        color: Colors.black12,
                         blurRadius: 10,
-                        spreadRadius: 1,
                       ),
                     ],
                   ),
                   child: Form(
                     key: _formKey,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextFormField(
                           decoration: InputDecoration(
-                            labelText: 'Phone number',
+                            labelText: 'Phone Number',
                             prefixIcon: Icon(Icons.phone),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                           onSaved: (value) => phoneNumber = value!,
-                          validator: (value) =>
-                          value!.isEmpty ? 'Enter your phone number' : null,
-                        ),
-                        SizedBox(height: 15),
+                          validator: (value) => value!.isEmpty
+                              ? 'Enter your phone number'
+                              : null,
+                        ).animate().fadeIn(duration: 500.ms),
+                        const SizedBox(height: 15),
                         TextFormField(
                           decoration: InputDecoration(
                             labelText: 'Password',
@@ -131,19 +106,25 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                               },
                             ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                           obscureText: !_isPasswordVisible,
                           onSaved: (value) => userPasswd = value!,
                           validator: (value) =>
                           value!.isEmpty ? 'Enter your password' : null,
-                        ),
-                        SizedBox(height: 20),
+                        ).animate().fadeIn(duration: 800.ms),
+                        const SizedBox(height: 20),
+
+                        // Tombol Login
                         _isLoading
-                            ? Center(child: CircularProgressIndicator())
+                            ? CircularProgressIndicator()
                             : SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF3DD598),
                               padding: EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -151,9 +132,11 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             onPressed: _handleLogin,
                             child: Text(
-                              'Enter',
-                              style: TextStyle(
+                              'Login',
+                              style: GoogleFonts.poppins(
                                 fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white70,
                               ),
                             ),
                           ),
@@ -162,45 +145,40 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+
+                const SizedBox(height: 20),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => ResetPasswordPage()));
+                  },
+                  child: Text(
+                    'Forgot Password?',
+                    style: GoogleFonts.poppins(color: Colors.black54),
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ResetPasswordPage()),
-                        );
-                      },
-                      child: Text(
-                        'Forgot Password?',
-                        style: TextStyle(color: Colors.blueAccent),
+                    Text(
+                      'Don\'t have an account?',
+                      style: GoogleFonts.poppins(
+                        color: Colors.black54,
                       ),
                     ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Dont have an account yet?',
-                        style: TextStyle(color: Colors.black54)),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
                           context,
-                          PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: RegistrationPage(),
-                            duration: Duration(milliseconds: 400),
-                            reverseDuration: Duration(milliseconds: 400),
-                          ),
+                          MaterialPageRoute(builder: (_) => RegistrationPage()),
                         );
                       },
                       child: Text(
-                        'register',
-                        style: TextStyle(color: Colors.blueAccent),
+                        'Register',
+                        style: GoogleFonts.poppins(
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -216,24 +194,20 @@ class _LoginPageState extends State<LoginPage> {
   void _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      setState(() {
-        _isLoading = true;
-      });
+      setState(() => _isLoading = true);
+
       try {
         final response = await apiService.loginUser(
-          action: "loginUser",
+          action: 'loginUser',
           phoneNumber: phoneNumber,
           userPasswd: userPasswd,
         );
 
         if (response['status'] == 'SUCCESS') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Login Berhasil')),
-          );
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => AuthedPage(
+              builder: (_) => AuthedPage(
                 userId: response['userId'],
                 userData: response,
               ),
@@ -241,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Login FAIL : ${response['msg']}')),
+            SnackBar(content: Text('Login Failed: ${response['msg']}')),
           );
         }
       } catch (e) {
@@ -249,11 +223,7 @@ class _LoginPageState extends State<LoginPage> {
           SnackBar(content: Text('Error: $e')),
         );
       } finally {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
+        setState(() => _isLoading = false);
       }
     }
   }
