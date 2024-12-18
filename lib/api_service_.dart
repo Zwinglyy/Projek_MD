@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   static const String baseUrl =
-      'https://script.google.com/macros/s/AKfycbwy8xmIAxkZD8DyhtSHkBHuUJWwtmATWi8WoRlW-hHXW4jW_6EmqSywdqP4QVpzp7u3/exec';
+      'https://script.google.com/macros/s/AKfycbxTVAUFGkd0FrRmWlxJVoaWo-sTwcAhAcVZgyUmjR3FvAlWZy1pPzBGVbjZR1EjxieA/exec';
 
   static const String logoutUserAction = 'logoutUser';
 
@@ -62,7 +62,9 @@ class ApiService {
   Future<Map<String, dynamic>> getCarbonProducedType() async {
     try {
       final response =
-          await http.get(Uri.parse('$baseUrl/getCarbonProduceType'));
+          await http.get(Uri.parse(baseUrl).replace(queryParameters: {
+            'action': 'getCarbonProducedType',
+            }));
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
@@ -78,7 +80,9 @@ class ApiService {
   Future<Map<String, dynamic>> getCPTElectricPower() async {
     try {
       final response =
-          await http.get(Uri.parse('$baseUrl/getCPT_ElectricPower'));
+          await http.get(Uri.parse(baseUrl).replace(queryParameters: {
+            'action': 'getCPTElectricPower',
+            }));
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
@@ -93,7 +97,9 @@ class ApiService {
   // Fungsi untuk mengambil data CPT-Transport
   Future<Map<String, dynamic>> getCPTTransport() async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/getCPT_Transport'));
+      final response = await http.get(Uri.parse(baseUrl).replace(queryParameters: {
+        'action': 'getCPT_Transport',
+      }));
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
@@ -108,8 +114,8 @@ class ApiService {
   // Fungsi untuk mengambil data CarbonProduced berdasarkan userId
   Future<Map<String, dynamic>> getCarbonProduced(String userId) async {
     try {
-      final Uri uri =
-          Uri.parse('$baseUrl/getCarbonProduced').replace(queryParameters: {
+      final Uri uri = Uri.parse(baseUrl).replace(queryParameters: {
+        'action': 'getCarbonProduced',
         'userId': userId,
       });
 
@@ -137,6 +143,7 @@ class ApiService {
     required String userId,
   }) async {
     final Uri uri = Uri.parse(baseUrl).replace(queryParameters: {
+      'action':'getTotalEmisiForUser',
       'userId': userId,
     });
 
@@ -167,7 +174,7 @@ class ApiService {
         return data
             .map((item) => {
                   'pqId':
-                      item['pqId']?.toString() ?? 'Unknown', // Default value
+                      item['pqId']?.toString() ?? 'Unknown',
                   'pqQuestion': item['pqQuestion']?.toString() ?? 'No Question',
                 })
             .toList();

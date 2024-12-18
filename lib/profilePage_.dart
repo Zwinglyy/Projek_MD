@@ -44,24 +44,24 @@ class ProfilePage extends StatelessWidget {
             _buildProfileInfo('Jawaban Personal', userData['pqAnswer']),
             Spacer(),
             // Update Profile Button
-            ElevatedButton.icon(
-              onPressed: () {
-                // Implement Update Profile Navigation
-              },
-              icon: Icon(Icons.edit, color: Colors.white),
-              label: Text(
-                'Perbarui Profil',
-                style: TextStyle(color: Colors.white), // Set text color to white
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF28A745), // Green color for update button
-                minimumSize: Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
+            // ElevatedButton.icon(
+            //   onPressed: () {
+            //     // Implement Update Profile Navigation
+            //   },
+            //   icon: Icon(Icons.edit, color: Colors.white),
+            //   label: Text(
+            //     'Perbarui Profil',
+            //     style: TextStyle(color: Colors.white), // Set text color to white
+            //   ),
+            //   style: ElevatedButton.styleFrom(
+            //     backgroundColor: Color(0xFF28A745), // Green color for update button
+            //     minimumSize: Size(double.infinity, 50),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(10),
+            //     ),
+            //     textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            //   ),
+            // ),
             SizedBox(height: 16),
             // Logout Button
             ElevatedButton.icon(
