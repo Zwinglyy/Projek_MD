@@ -22,7 +22,6 @@ class HomePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   _buildCategorySection(
                     title: "Transportation",
                     icons: _transportationIcons,
@@ -35,14 +34,13 @@ class HomePage extends StatelessWidget {
                           builder: (context) => TransportationPage(
                             title: icon['label'],
                             transportId: icon['id'],
-                            userId:userId,
+                            userId: userId,
                           ),
                         ),
                       );
                     },
                   ),
                   const SizedBox(height: 20),
-
                   _buildCategorySection(
                     title: "Electricity",
                     icons: _electricityIcons,
@@ -55,7 +53,7 @@ class HomePage extends StatelessWidget {
                           builder: (context) => ElectricityPage(
                             title: icon['label'],
                             electricityId: icon['id'],
-                            userId:userId,
+                            userId: userId,
                           ),
                         ),
                       );
@@ -65,7 +63,6 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-
           _buildSummaryCard(),
         ],
       ),
@@ -89,6 +86,7 @@ class HomePage extends StatelessWidget {
             style: TextStyle(
               fontSize: screenWidth < 600 ? 16 : 20,
               fontWeight: FontWeight.bold,
+              color: Colors.green.shade800,
             ),
           ),
         ),
@@ -99,8 +97,8 @@ class HomePage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: screenWidth < 600 ? 3 : 5,
-            crossAxisSpacing: 0,
-            mainAxisSpacing: 0,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
           ),
           itemCount: icons.length,
           itemBuilder: (context, index) {
@@ -142,6 +140,7 @@ class HomePage extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
+              color: Colors.green,
             ),
           ),
           const SizedBox(height: 10),
@@ -161,6 +160,9 @@ class HomePage extends StatelessWidget {
                 onPressed: () {
                   // Tambahkan aksi untuk button
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                ),
                 child: const Text("Details"),
               ),
             ],
@@ -172,6 +174,7 @@ class HomePage extends StatelessWidget {
 
   Widget _buildCategoryIcon(IconData icon, String label, double screenWidth) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CircleAvatar(
           radius: 30,
@@ -185,6 +188,7 @@ class HomePage extends StatelessWidget {
           style: TextStyle(
             fontSize: screenWidth < 600 ? 12 : 14,
             fontWeight: FontWeight.w500,
+            color: Colors.green.shade800,
           ),
         ),
       ],
