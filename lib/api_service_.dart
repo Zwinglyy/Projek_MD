@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   static const String baseUrl =
-      'https://script.google.com/macros/s/AKfycbxTVAUFGkd0FrRmWlxJVoaWo-sTwcAhAcVZgyUmjR3FvAlWZy1pPzBGVbjZR1EjxieA/exec';
+      'https://script.google.com/macros/s/AKfycbwjElfF1AZNTtIGc6X4gTsLDyvYSxdWqUWN7AleCfBiDUe0WC-X9m7QgHJbeVoq7KP3/exec';
 
   static const String logoutUserAction = 'logoutUser';
 
