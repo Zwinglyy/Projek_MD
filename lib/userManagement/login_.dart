@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 // Logo dengan animasi
                 Image.asset(
-                  'image/logofull.png',
+                  'image/MoCa Logo.png',
                   width: 200,
                 ).animate().fadeIn(duration: 1.seconds).scale(),
                 const SizedBox(height: 10),

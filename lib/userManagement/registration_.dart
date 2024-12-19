@@ -97,7 +97,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'image/logofull.png',
+                  'image/MoCa Logo.png',
                   width: 200,
                   height: 200,
                 ),
