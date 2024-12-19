@@ -98,7 +98,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               children: [
                 Image.asset(
                   'image/MoCa Logo.png',
-                  width: 200,
+                  width: 100,
                   height: 200,
                 ),
                 SizedBox(height: 10),
