@@ -11,25 +11,51 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
   final ApiService apiService = ApiService();
   final _formKey = GlobalKey<FormState>();
   String phoneNumber = '';
   String userPasswd = '';
   bool _isPasswordVisible = false;
   bool _isLoading = false;
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 4),
+      vsync: this,
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF3DD598), Color(0xFF83EAF1)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
+      body: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color.lerp(Color(0xFFFF0000), Color(0xFFFFA500), _controller.value)!,
+                  Color.lerp(Color(0xFFFFA500), Color(0xFFFFFF00), _controller.value)!,
+                  Color.lerp(Color(0xFFFFFF00), Color(0xFF00FF00), _controller.value)!,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: child,
+          );
+        },
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -46,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: GoogleFonts.poppins(
                     fontSize: 28,
                     fontWeight: FontWeight.w700,
-                    color: Colors.black54,
+                    color: Colors.black,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -54,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                   'Login to continue',
                   style: GoogleFonts.poppins(
                     fontSize: 16,
-                    color: Colors.black54,
+                    color: Colors.black,
                   ),
                 ),
                 const SizedBox(height: 30),
@@ -63,11 +89,11 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Colors.white.withOpacity(0.7),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black12,
+                        color: Colors.black.withOpacity(0.4),
                         blurRadius: 10,
                       ),
                     ],
@@ -154,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   child: Text(
                     'Forgot Password?',
-                    style: GoogleFonts.poppins(color: Colors.black54),
+                    style: GoogleFonts.poppins(color: Colors.black),
                   ),
                 ),
                 Row(
@@ -163,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                     Text(
                       'Don\'t have an account?',
                       style: GoogleFonts.poppins(
-                        color: Colors.black54,
+                        color: Colors.black,
                       ),
                     ),
                     TextButton(

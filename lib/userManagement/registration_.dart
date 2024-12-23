@@ -1,33 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:emisi_md/api_service_.dart';
-import 'package:emisi_md/userManagement/login_.dart';
-import 'dart:async';
-
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:async';
+import '../api_service_.dart';
+import 'login_.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
-  ApiService apiService = ApiService();
-
+class _RegistrationPageState extends State<RegistrationPage> with SingleTickerProviderStateMixin {
+  final ApiService apiService = ApiService();
   final _formKey = GlobalKey<FormState>();
   String userName = '';
   String phoneNumber = '';
   String address = '';
   String pqAnswer = '';
   String? selectedPQId;
-
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
   bool _isPasswordMatching = true;
   bool _isLoading = false;
-
-  List<Map<String, dynamic>> questions = [];
-  Timer? _gradientTimer;
-  List<Color> gradientColors = [Color(0xFF3DD598), Color(0xFF83EAF1)];
+  late AnimationController _controller;
 
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
@@ -35,26 +29,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 4),
+      vsync: this,
+    )..repeat(reverse: true);
     _confirmPasswordController.addListener(_checkPasswordMatch);
     _loadQuestions();
-    _startGradientAnimation();
-  }
-
-  void _startGradientAnimation() {
-    _gradientTimer = Timer.periodic(Duration(seconds: 3), (timer) {
-      if (mounted) {
-        setState(() {
-          gradientColors = gradientColors.reversed.toList();
-        });
-      }
-    });
   }
 
   @override
   void dispose() {
+    _controller.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-    _gradientTimer?.cancel();
     super.dispose();
   }
 
@@ -68,8 +55,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     try {
       final fetchedQuestions = await apiService.getQuestions();
       setState(() {
-        questions = fetchedQuestions;
-        selectedPQId = questions.isNotEmpty ? questions.first['pqId'] : null;
+        selectedPQId = fetchedQuestions.isNotEmpty ? fetchedQuestions.first['pqId'] : null;
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -81,15 +67,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnimatedContainer(
-        duration: Duration(seconds: 3),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: gradientColors,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+      body: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color.lerp(Color(0xFFFF0000), Color(0xFFFFA500), _controller.value)!,
+                  Color.lerp(Color(0xFFFFA500), Color(0xFFFFFF00), _controller.value)!,
+                  Color.lerp(Color(0xFFFFFF00), Color(0xFF00FF00), _controller.value)!,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: child,
+          );
+        },
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
@@ -104,7 +99,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 SizedBox(height: 10),
                 Text(
                   'Register New Account',
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
@@ -115,13 +110,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.white.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
+                        color: Colors.black.withOpacity(0.4),
                         blurRadius: 10,
-                        spreadRadius: 1,
                       ),
                     ],
                   ),
@@ -185,29 +179,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   children: [
                     Text("Already have an account?", style: GoogleFonts.poppins(
                       color: Colors.black54,
-                    ),
-                    ),
+                    )),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
                           context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation, secondaryAnimation) {
-                              return FadeTransition(
-                                opacity: animation,
-                                child: LoginPage(), // Your LoginPage widget
-                              );
-                            },
-                            transitionDuration: Duration(milliseconds: 500), // Duration of the transition
-                          ),
+                          MaterialPageRoute(builder: (_) => LoginPage()),
                         );
                       },
                       child: Text('Log in',
                           style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
                   ],
                 ),
@@ -256,12 +240,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         labelText: 'Select Security Question',
         border: OutlineInputBorder(),
       ),
-      items: questions.map((q) {
-        return DropdownMenuItem<String>(
-          value: q['pqId'],
-          child: Text(q['pqQuestion'] ?? ''),
-        );
-      }).toList(),
+      items: [], // Placeholder for security questions
       onChanged: (value) => setState(() => selectedPQId = value!),
       validator: (value) => value == null ? 'Please select a question' : null,
     );

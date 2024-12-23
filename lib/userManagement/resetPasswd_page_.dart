@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:emisi_md/api_service_.dart';
 
 class ResetPasswordPage extends StatefulWidget {
@@ -7,7 +9,7 @@ class ResetPasswordPage extends StatefulWidget {
   _ResetPasswordPageState createState() => _ResetPasswordPageState();
 }
 
-class _ResetPasswordPageState extends State<ResetPasswordPage> {
+class _ResetPasswordPageState extends State<ResetPasswordPage> with SingleTickerProviderStateMixin {
   final ApiService apiService = ApiService();
   final GlobalKey<FormState> _formKeyStep1 = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeyStep2 = GlobalKey<FormState>();
@@ -24,27 +26,64 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   bool isStep3 = false;
   bool isPQValidated = false;
   bool _isPasswordVisible = false;
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 4),
+      vsync: this,
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Reset Password', style: TextStyle(fontSize: 24)),
-
-      ),
-      body: AbsorbPointer(
-        absorbing: isLoading,
-        child: isLoading
-            ? Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (!isStep2 && !isStep3) _buildStep1(),
-              if (isStep2 && !isPQValidated) _buildStep2(),
-              if (isStep3) _buildStep3(),
-            ],
+      body: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Container(
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color.lerp(Color(0xFFFF0000), Color(0xFFFFA500), _controller.value)!,
+                  Color.lerp(Color(0xFFFFA500), Color(0xFFFFFF00), _controller.value)!,
+                  Color.lerp(Color(0xFFFFFF00), Color(0xFF00FF00), _controller.value)!,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: child,
+          );
+        },
+        child: AbsorbPointer(
+          absorbing: isLoading,
+          child: isLoading
+              ? Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (!isStep2 && !isStep3) _buildStep1(),
+                  if (isStep2 && !isPQValidated) _buildStep2(),
+                  if (isStep3) _buildStep3(),
+                ],
+              ),
+            ),
           ),
         ),
       ),
