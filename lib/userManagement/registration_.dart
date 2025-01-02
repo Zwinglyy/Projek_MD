@@ -23,6 +23,8 @@ class _RegistrationPageState extends State<RegistrationPage> with SingleTickerPr
   bool _isLoading = false;
   late AnimationController _controller;
 
+  List<Map<String, dynamic>> questions = [];
+
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
@@ -55,7 +57,8 @@ class _RegistrationPageState extends State<RegistrationPage> with SingleTickerPr
     try {
       final fetchedQuestions = await apiService.getQuestions();
       setState(() {
-        selectedPQId = fetchedQuestions.isNotEmpty ? fetchedQuestions.first['pqId'] : null;
+        questions = fetchedQuestions;
+        selectedPQId = questions.isNotEmpty ? questions.first['pqId'] : null;
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -240,7 +243,12 @@ class _RegistrationPageState extends State<RegistrationPage> with SingleTickerPr
         labelText: 'Select Security Question',
         border: OutlineInputBorder(),
       ),
-      items: [], // Placeholder for security questions
+      items: questions.map((q) {
+        return DropdownMenuItem<String>(
+          value: q['pqId'],
+          child: Text(q['pqQuestion'] ?? ''),
+        );
+      }).toList(),
       onChanged: (value) => setState(() => selectedPQId = value!),
       validator: (value) => value == null ? 'Please select a question' : null,
     );
@@ -249,7 +257,46 @@ class _RegistrationPageState extends State<RegistrationPage> with SingleTickerPr
   Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      // Registration logic here
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        final dateTime = DateTime.now().toIso8601String();
+        final response = await apiService.registerUser(
+          action: 'registerUser',
+          dateTime: dateTime,
+          userName: userName,
+          userPasswd: _passwordController.text,
+          phoneNumber: phoneNumber,
+          address: address,
+          pqId: selectedPQId!,
+          pqAnswer: pqAnswer,
+        );
+
+        if (response['status'] == 'SUCCESS') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Registration successful!')),
+          );
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(response['message'] ?? 'Registration failed')),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 }
