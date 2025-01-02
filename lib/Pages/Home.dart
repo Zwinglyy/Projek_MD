@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'transportation_page.dart';
 import 'electricity_page.dart';
+import 'transportation_page.dart';
 import 'package:emisi_md/api_service_.dart';
 
 class HomePage extends StatefulWidget {
@@ -169,12 +169,26 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Total Carbon Footprint",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Total Carbon Footprint",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.refresh, color: Colors.green),
+                onPressed: () {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  _fetchSummaryData();
+                },
+              ),
+            ],
           ),
           const SizedBox(height: 10),
           Row(
@@ -188,15 +202,15 @@ class _HomePageState extends State<HomePage> {
           isLoading
               ? const CircularProgressIndicator()
               : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Total Emissions", style: TextStyle(fontSize: 14)),
-                    Text(
-                      summaryData?['totalCarbonEmission']?.toString() ?? 'N/A',
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ],
-                ),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("Total Emissions", style: TextStyle(fontSize: 14)),
+              Text(
+                summaryData?['totalCarbonEmission']?.toString() ?? 'N/A',
+                style: const TextStyle(fontSize: 14),
+              ),
+            ],
+          ),
           const SizedBox(height: 10),
           // Total Distance and Total Duration
           Row(
