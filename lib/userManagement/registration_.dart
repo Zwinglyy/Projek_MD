@@ -77,9 +77,8 @@ class _RegistrationPageState extends State<RegistrationPage> with SingleTickerPr
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color.lerp(Color(0xFFFF0000), Color(0xFFFFA500), _controller.value)!,
-                  Color.lerp(Color(0xFFFFA500), Color(0xFFFFFF00), _controller.value)!,
-                  Color.lerp(Color(0xFFFFFF00), Color(0xFF00FF00), _controller.value)!,
+                  Color.lerp(Colors.lightGreen, Colors.teal, _controller.value)!,
+                  Color.lerp(Colors.teal, Colors.blueAccent, _controller.value)!,
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -105,7 +104,7 @@ class _RegistrationPageState extends State<RegistrationPage> with SingleTickerPr
                   style: GoogleFonts.poppins(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: Colors.white,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -167,7 +166,7 @@ class _RegistrationPageState extends State<RegistrationPage> with SingleTickerPr
                               style: GoogleFonts.poppins(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white70,
+                                color: Colors.white,
                               ),
                             ),
                           ),
@@ -181,7 +180,7 @@ class _RegistrationPageState extends State<RegistrationPage> with SingleTickerPr
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("Already have an account?", style: GoogleFonts.poppins(
-                      color: Colors.black54,
+                      color: Colors.white,
                     )),
                     TextButton(
                       onPressed: () {
@@ -192,7 +191,7 @@ class _RegistrationPageState extends State<RegistrationPage> with SingleTickerPr
                       },
                       child: Text('Log in',
                           style: GoogleFonts.poppins(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
                           )),
                     ),
