@@ -54,9 +54,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> with SingleTicker
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color.lerp(Color(0xFFFF0000), Color(0xFFFFA500), _controller.value)!,
-                  Color.lerp(Color(0xFFFFA500), Color(0xFFFFFF00), _controller.value)!,
-                  Color.lerp(Color(0xFFFFFF00), Color(0xFF00FF00), _controller.value)!,
+                  Color.lerp(Colors.lightGreen, Colors.teal, _controller.value)!,
+              Color.lerp(Colors.teal, Colors.blueAccent, _controller.value)!,
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -68,7 +67,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> with SingleTicker
         child: AbsorbPointer(
           absorbing: isLoading,
           child: isLoading
-              ? Center(child: CircularProgressIndicator())
+              ? Center(child: CircularProgressIndicator(
+              color: Colors.blue,
+          ))
               : SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: ConstrainedBox(
@@ -98,32 +99,68 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> with SingleTicker
         children: [
           Text(
             'Masukkan Nomor Telepon Anda',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+            style: GoogleFonts.poppins(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
           SizedBox(height: 20),
-          TextFormField(
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              labelText: 'Nomor Telepon',
-              prefixIcon: Icon(Icons.phone, color: Colors.black),
-              border: OutlineInputBorder(),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white, // Warna latar belakang untuk TextFormField
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1), // Bayangan lembut
+                  blurRadius: 8,
+                  offset: Offset(3, 3),
+                ),
+              ],
             ),
-            onSaved: (value) => phoneNumber = value!,
-            validator: (value) => value!.isEmpty ? 'Masukkan nomor telepon Anda' : null,
+            child: TextFormField(
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                labelText: 'Nomor Telepon',
+                labelStyle: TextStyle(color: Colors.grey),
+                prefixIcon: Icon(Icons.phone, color: Colors.black),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none, // Hapus border default
+                ),
+                contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                filled: true,
+                fillColor: Colors.white, // Warna latar belakang tidak transparan
+              ),
+              onSaved: (value) => phoneNumber = value!,
+              validator: (value) =>
+              value!.isEmpty ? 'Masukkan nomor telepon Anda' : null,
+            ),
           ),
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: _validatePhoneNumber,
-            child: Text('Lanjutkan', style: TextStyle (fontSize: 18)),
+            child: Text(
+              'Lanjutkan',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
+              backgroundColor: Color(0xFF3DD598),
               padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
           ),
         ],
       ),
     );
   }
+
 
   Widget _buildStep2() {
     return Form(
@@ -133,31 +170,64 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> with SingleTicker
         children: [
           Text(
             pqQuestion,
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+            style: GoogleFonts.poppins(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
           SizedBox(height: 20),
-          TextFormField(
-            decoration: InputDecoration(
-              labelText: 'Jawaban Anda',
-              prefixIcon: Icon(Icons.question_answer, color: Colors.black),
-              border: OutlineInputBorder(),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white, // Warna latar belakang untuk TextFormField
+              borderRadius: BorderRadius.circular(12), // Sudut membulat
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1), // Bayangan lembut
+                  blurRadius: 8,
+                  offset: Offset(3, 3),
+                ),
+              ],
             ),
-            onSaved: (value) => pqAnswer = value!,
-            validator: (value) => value!.isEmpty ? 'Masukkan jawaban' : null,
+            child: TextFormField(
+              decoration: InputDecoration(
+                labelText: 'Jawaban Anda',
+                labelStyle: TextStyle(color: Colors.grey),
+                prefixIcon: Icon(Icons.question_answer, color: Colors.black),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none, // Hapus border default
+                ),
+                contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                filled: true,
+                fillColor: Colors.white, // Warna latar belakang tidak transparan
+              ),
+              onSaved: (value) => pqAnswer = value!,
+              validator: (value) => value!.isEmpty ? 'Masukkan jawaban' : null,
+            ),
           ),
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: _verifyPQAnswer,
-            child: Text('Lanjutkan', style: TextStyle(fontSize: 18)),
+            child: Text(
+              'Lanjutkan',
+              style: GoogleFonts.poppins(fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,),
+            ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
+              backgroundColor: Color(0xFF3DD598),
               padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
           ),
         ],
       ),
     );
   }
+
 
   Widget _buildStep3() {
     return Form(
@@ -167,46 +237,98 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> with SingleTicker
         children: [
           Text(
             'Masukkan Kata Sandi Baru',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+            style: GoogleFonts.poppins(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
           SizedBox(height: 20),
-          TextFormField(
-            obscureText: !_isPasswordVisible,
-            decoration: InputDecoration(
-              labelText: 'Kata Sandi Baru',
-              prefixIcon: Icon(Icons.lock, color: Colors.black),
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                  color: Colors.black,
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white70, // Warna latar belakang
+              borderRadius: BorderRadius.circular(12), // Sudut membulat
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1), // Bayangan lembut
+                  blurRadius: 8,
+                  offset: Offset(3, 3),
                 ),
-                onPressed: () {
-                  setState(() {
-                    _isPasswordVisible = !_isPasswordVisible;
-                  });
-                },
-              ),
-              border: OutlineInputBorder(),
+              ],
             ),
-            onChanged: (value) => newPassword = value,
-            validator: (value) => value!.isEmpty ? 'Masukkan kata sandi baru' : null,
+            child: TextFormField(
+              obscureText: !_isPasswordVisible,
+              decoration: InputDecoration(
+                labelText: 'Kata Sandi Baru',
+                labelStyle: TextStyle(color: Colors.grey),
+                prefixIcon: Icon(Icons.lock, color: Colors.black),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
+                  },
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none, // Hapus garis tepi default
+                ),
+                contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                filled: true,
+                fillColor: Colors.white70, // Warna latar belakang tidak transparan
+              ),
+              onChanged: (value) => newPassword = value,
+              validator: (value) => value!.isEmpty ? 'Masukkan kata sandi baru' : null,
+            ),
           ),
           SizedBox(height: 20),
-          TextFormField(
-            obscureText: !_isPasswordVisible,
-            decoration: InputDecoration(
-              labelText: 'Ketik Ulang Kata Sandi',
-              prefixIcon: Icon(Icons.lock, color: Colors.black),
-              border: OutlineInputBorder(),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white70, // Warna latar belakang
+              borderRadius: BorderRadius.circular(12), // Sudut membulat
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1), // Bayangan lembut
+                  blurRadius: 8,
+                  offset: Offset(3, 3),
+                ),
+              ],
             ),
-            validator: (value) => value != newPassword ? 'Kata sandi tidak cocok' : null,
+            child: TextFormField(
+              obscureText: !_isPasswordVisible,
+              decoration: InputDecoration(
+                labelText: 'Ketik Ulang Kata Sandi',
+                labelStyle: TextStyle(color: Colors.grey),
+                prefixIcon: Icon(Icons.lock, color: Colors.black),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none, // Hapus garis tepi default
+                ),
+                contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                filled: true,
+                fillColor: Colors.white, // Warna latar belakang tidak transparan
+              ),
+              validator: (value) =>
+              value != newPassword ? 'Kata sandi tidak cocok' : null,
+            ),
           ),
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: _updatePassword,
-            child: Text('Perbarui Kata Sandi', style: TextStyle(fontSize: 18)),
+            child: Text(
+              'Perbarui Kata Sandi',
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
+              backgroundColor: Color(0xFF3DD598),
               padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
             ),
           ),
@@ -214,6 +336,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> with SingleTicker
       ),
     );
   }
+
 
   void _validatePhoneNumber() async {
     if (_formKeyStep1.currentState!.validate()) {

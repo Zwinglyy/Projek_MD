@@ -18,15 +18,16 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   String userPasswd = '';
   bool _isPasswordVisible = false;
   bool _isLoading = false;
+
   late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 6),
       vsync: this,
-    )..repeat(reverse: true);
+    )..repeat(reverse: true); // Animasi bolak-balik
   }
 
   @override
@@ -45,9 +46,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color.lerp(Color(0xFFFF0000), Color(0xFFFFA500), _controller.value)!,
-                  Color.lerp(Color(0xFFFFA500), Color(0xFFFFFF00), _controller.value)!,
-                  Color.lerp(Color(0xFFFFFF00), Color(0xFF00FF00), _controller.value)!,
+                  Color.lerp(Colors.lightGreen, Colors.teal, _controller.value)!,
+                  Color.lerp(Colors.teal, Colors.blueAccent, _controller.value)!,
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                   style: GoogleFonts.poppins(
                     fontSize: 28,
                     fontWeight: FontWeight.w700,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                   'Login to continue',
                   style: GoogleFonts.poppins(
                     fontSize: 16,
-                    color: Colors.black,
+                    color: Colors.white70,
                   ),
                 ),
                 const SizedBox(height: 30),
@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                           validator: (value) => value!.isEmpty
                               ? 'Enter your phone number'
                               : null,
-                        ).animate().fadeIn(duration: 500.ms),
+                        ),
                         const SizedBox(height: 15),
                         TextFormField(
                           decoration: InputDecoration(
@@ -140,12 +140,26 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                           onSaved: (value) => userPasswd = value!,
                           validator: (value) =>
                           value!.isEmpty ? 'Enter your password' : null,
-                        ).animate().fadeIn(duration: 800.ms),
+                        ),
                         const SizedBox(height: 20),
 
                         // Tombol Login
                         _isLoading
-                            ? CircularProgressIndicator()
+                            ? Column(
+                          children: [
+                            LinearProgressIndicator(
+                              color: Colors.lightGreen,
+                            ).animate().scale(duration: 500.ms),
+                            const SizedBox(height: 10),
+                            Text(
+                              'Logging in...',
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        )
                             : SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
@@ -162,7 +176,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                               style: GoogleFonts.poppins(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white70,
+                                color: Colors.white,
                               ),
                             ),
                           ),
@@ -171,7 +185,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
                 TextButton(
                   onPressed: () {
@@ -180,7 +193,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                   },
                   child: Text(
                     'Forgot Password?',
-                    style: GoogleFonts.poppins(color: Colors.black),
+                    style: GoogleFonts.poppins(color: Colors.white),
                   ),
                 ),
                 Row(
@@ -189,7 +202,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     Text(
                       'Don\'t have an account?',
                       style: GoogleFonts.poppins(
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     ),
                     TextButton(
@@ -202,7 +215,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                       child: Text(
                         'Register',
                         style: GoogleFonts.poppins(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
