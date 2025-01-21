@@ -193,7 +193,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                   },
                   child: Text(
                     'Forgot Password?',
-                    style: GoogleFonts.poppins(color: Colors.white),
+                    style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
                 Row(

@@ -4,9 +4,26 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   static const String baseUrl =
-      'https://script.google.com/macros/s/AKfycby1UcUW23bAgZQZ2JkuTiBwWsF2cl8QrFA-h6-wLqrdof43CKj_cOUK8xogtz1H-_Sk/exec';
+      'https://script.google.com/macros/s/AKfycbyq0OmAJm75B7N52q-CW5zRxVMlgE1Vza8NPQiZDJbtXha7tEZ8znMXsufvUSy8uNbD/exec';
 
   static const String logoutUserAction = 'logoutUser';
+
+  Future<Map<String, dynamic>> percentageCPT(
+      {required String userId}) async {
+    try {
+      final response =
+          await http.get(Uri.parse(baseUrl).replace(queryParameters: {
+        'action': 'percentageCPT',
+        'userId': userId,
+      }));
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+      throw Exception('Failed to fetch percentage data');
+    } catch (error) {
+      return {'status': 'FAILED', 'msg': error.toString()};
+    }
+  }
 
   Future<Map<String, dynamic>> postCarbonProduced({
     required String action,
@@ -63,8 +80,8 @@ class ApiService {
     try {
       final response =
           await http.get(Uri.parse(baseUrl).replace(queryParameters: {
-            'action': 'getCarbonProducedType',
-            }));
+        'action': 'getCarbonProducedType',
+      }));
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
@@ -81,8 +98,8 @@ class ApiService {
     try {
       final response =
           await http.get(Uri.parse(baseUrl).replace(queryParameters: {
-            'action': 'getCPTElectricPower',
-            }));
+        'action': 'getCPTElectricPower',
+      }));
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
@@ -97,7 +114,8 @@ class ApiService {
   // Fungsi untuk mengambil data CPT-Transport
   Future<Map<String, dynamic>> getCPTTransport() async {
     try {
-      final response = await http.get(Uri.parse(baseUrl).replace(queryParameters: {
+      final response =
+          await http.get(Uri.parse(baseUrl).replace(queryParameters: {
         'action': 'getCPT_Transport',
       }));
       if (response.statusCode == 200) {
@@ -143,7 +161,7 @@ class ApiService {
     required String userId,
   }) async {
     final Uri uri = Uri.parse(baseUrl).replace(queryParameters: {
-      'action':'getTotalEmisiForUser',
+      'action': 'getTotalEmisiForUser',
       'userId': userId,
     });
 
@@ -173,8 +191,7 @@ class ApiService {
         final data = json.decode(response.body) as List;
         return data
             .map((item) => {
-                  'pqId':
-                      item['pqId']?.toString() ?? 'Unknown',
+                  'pqId': item['pqId']?.toString() ?? 'Unknown',
                   'pqQuestion': item['pqQuestion']?.toString() ?? 'No Question',
                 })
             .toList();
