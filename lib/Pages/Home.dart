@@ -197,7 +197,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          Article(),
         ],
       ),
     );
@@ -316,65 +315,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget Article() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            offset: Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Article",
-            style: GoogleFonts.poppins(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Pengertian Carbon Emission",
-                style: GoogleFonts.poppins(fontSize: 14),
-              ),
-              GestureDetector(
-                onTap: () async {
-                  const url =
-                      'https://pgnlng.co.id/berita/wawasan/emisi-karbon/#:~:text=Pengertian%20Emisi%20Karbon&text=Dalam%20hal%20ini%2C%20emisi%20karbon,lepasnya%20gas%20CO2%20ke%20atmosfer.';
-                  if (await canLaunch(url)) {
-                    await launch(url);
-                  } else {
-                    throw 'Could not launch $url';
-                  }
-                },
-                child: Text(
-                  "Click Here",
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+
 }
 
 // Data kategori ikon transportasi
