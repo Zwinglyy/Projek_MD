@@ -100,26 +100,20 @@ class _HomePageState extends State<HomePage> {
     try {
       final data =
           await apiService.getTotalCarbonEmission(userId: widget.userId);
-      print("Fetched emission data: $data"); // Print the fetched data
+      print("Fetched emission data: $data");
 
-      // Check the structure of the data
-      if (data is Map) {
-        // If it's a Map, let's print the keys to inspect it
-        print("Data is a Map with keys: ${data.keys}");
-      }
+      if (data is List) {
+        print("Data is a List with length: ${data.length}");
 
-      setState(() {
-        // Assuming data contains a key like 'entries' that holds the emission list
-        if (data is Map && data['entries'] != null) {
+        setState(() {
           emissionData = {
-            for (var entry
-                in data['entries']) // Adjust this according to actual structure
+            for (var entry in data)
               entry['id']: double.tryParse(entry['totalEmission']) ?? 0.0
           };
-        } else {
-          print("Emission data is not in expected format.");
-        }
-      });
+        });
+      } else {
+        print("Unexpected data format: ${data.runtimeType}");
+      }
     } catch (e) {
       print("Error fetching emission data: $e");
     }
@@ -174,6 +168,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                   ),
+                  
                   const SizedBox(height: 20),
                   _buildCategorySection(
                     title: "Electricity",
@@ -314,8 +309,6 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
-
-
 }
 
 // Data kategori ikon transportasi

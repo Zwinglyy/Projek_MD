@@ -8,20 +8,40 @@ class ApiService {
 
   static const String logoutUserAction = 'logoutUser';
 
-  Future<Map<String, dynamic>> getTotalCarbonEmission(
-      {required String userId}) async {
+  // Future<Map<String, dynamic>> getTotalCarbonEmission(
+  //     {required String userId}) async {
+  //   try {
+  //     final response =
+  //         await http.get(Uri.parse(baseUrl).replace(queryParameters: {
+  //       'action': 'getTotalCarbonEmission',
+  //       'userId': userId,
+  //     }));
+  //     if (response.statusCode == 200) {
+  //       return jsonDecode(response.body);
+  //     }
+  //     throw Exception('Failed to fetch total carbon emission data');
+  //   } catch (error) {
+  //     return {'status': 'FAILED', 'msg': error.toString()};
+  //   }
+  // }
+
+  Future<List<dynamic>> getTotalCarbonEmission({required String userId}) async {
     try {
       final response =
           await http.get(Uri.parse(baseUrl).replace(queryParameters: {
         'action': 'getTotalCarbonEmission',
         'userId': userId,
       }));
+
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+        return jsonDecode(response.body); // Return as a List
+      } else {
+        throw Exception('Failed to fetch total carbon emission data');
       }
-      throw Exception('Failed to fetch total carbon emission data');
     } catch (error) {
-      return {'status': 'FAILED', 'msg': error.toString()};
+      return [
+        {'status': 'FAILED', 'msg': error.toString()}
+      ]; // Return a List with error info
     }
   }
 
