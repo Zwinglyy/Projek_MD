@@ -15,10 +15,13 @@ class _CircleClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     Path path = Path();
-    path.addOval(Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: size.width / 2));
-    
+    path.addOval(Rect.fromCircle(
+        center: Offset(size.width / 2, size.height / 2),
+        radius: size.width / 2));
+
     double fillHeight = (size.height * percentage) / 100;
-    path.addRect(Rect.fromLTRB(0, size.height - fillHeight, size.width, size.height));
+    path.addRect(
+        Rect.fromLTRB(0, size.height - fillHeight, size.width, size.height));
     path.fillType = PathFillType.evenOdd;
     return path;
   }
@@ -44,6 +47,7 @@ class _HomePageState extends State<HomePage> {
   Map<String, double> categoryPercentages = {};
   bool isLoading = true;
   Map<String, double> percentageData = {};
+  Map<String, double> emissionData = {};
 
   @override
   void initState() {
@@ -51,6 +55,7 @@ class _HomePageState extends State<HomePage> {
     apiService = ApiService();
     _fetchSummaryData();
     _fetchPercentageData();
+    _fetchEmissionData();
   }
 
   _fetchSummaryData() async {
@@ -59,7 +64,6 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         summaryData = data;
         isLoading = false;
-
       });
     } catch (e) {
       setState(() {
@@ -92,7 +96,34 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  _fetchEmissionData() async {
+    try {
+      final data =
+          await apiService.getTotalCarbonEmission(userId: widget.userId);
+      print("Fetched emission data: $data"); // Print the fetched data
 
+      // Check the structure of the data
+      if (data is Map) {
+        // If it's a Map, let's print the keys to inspect it
+        print("Data is a Map with keys: ${data.keys}");
+      }
+
+      setState(() {
+        // Assuming data contains a key like 'entries' that holds the emission list
+        if (data is Map && data['entries'] != null) {
+          emissionData = {
+            for (var entry
+                in data['entries']) // Adjust this according to actual structure
+              entry['id']: double.tryParse(entry['totalEmission']) ?? 0.0
+          };
+        } else {
+          print("Emission data is not in expected format.");
+        }
+      });
+    } catch (e) {
+      print("Error fetching emission data: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,8 +140,9 @@ class _HomePageState extends State<HomePage> {
               setState(() {
                 isLoading = true;
               });
-              _fetchSummaryData();  // Refresh the summary data
-              _fetchPercentageData();  // Refresh the percentage data
+              _fetchSummaryData(); // Refresh the summary data
+              _fetchPercentageData(); // Refresh the percentage data
+              _fetchEmissionData(); // Refresh the emission data
             },
           ),
         ],
@@ -219,12 +251,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildCategoryIcon(
-    IconData icon, String label, double screenWidth, String id) {
+      IconData icon, String label, double screenWidth, String id) {
     double percentage = percentageData[id] ?? 0.0;
+    double emission = emissionData[id] ?? 0.0;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          style: GoogleFonts.poppins(
+            fontSize: screenWidth < 600 ? 12 : 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 8),
         Stack(
           alignment: Alignment.center,
           children: [
@@ -236,7 +278,6 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.green.shade100,
               ),
             ),
-            
             ClipPath(
               clipper: _CircleClipper(percentage),
               child: Container(
@@ -248,7 +289,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-
             CircleAvatar(
               radius: 30,
               backgroundColor: Colors.transparent,
@@ -260,19 +300,17 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
         Text(
-          label,
-          textAlign: TextAlign.center,
-          style: GoogleFonts.poppins(
-            fontSize: screenWidth < 600 ? 12 : 14,
-            fontWeight: FontWeight.w500,
-          ),
+          '${percentage.toStringAsFixed(1)}%', // Display percentage
+          style:
+              GoogleFonts.poppins(fontSize: 12, color: Colors.green.shade700),
         ),
         const SizedBox(height: 4),
         Text(
-          '${percentage.toStringAsFixed(1)}%',  // Tampilkan persentase
-          style: GoogleFonts.poppins(fontSize: 12, color: Colors.green.shade700),
+          '${emission.toStringAsFixed(2)} kg CO2', // Display emission
+          style:
+              GoogleFonts.poppins(fontSize: 12, color: Colors.green.shade700),
         ),
       ],
     );
@@ -314,7 +352,8 @@ class _HomePageState extends State<HomePage> {
               ),
               GestureDetector(
                 onTap: () async {
-                  const url = 'https://pgnlng.co.id/berita/wawasan/emisi-karbon/#:~:text=Pengertian%20Emisi%20Karbon&text=Dalam%20hal%20ini%2C%20emisi%20karbon,lepasnya%20gas%20CO2%20ke%20atmosfer.';
+                  const url =
+                      'https://pgnlng.co.id/berita/wawasan/emisi-karbon/#:~:text=Pengertian%20Emisi%20Karbon&text=Dalam%20hal%20ini%2C%20emisi%20karbon,lepasnya%20gas%20CO2%20ke%20atmosfer.';
                   if (await canLaunch(url)) {
                     await launch(url);
                   } else {
@@ -351,9 +390,29 @@ final List<Map<String, dynamic>> _transportationIcons = [
 
 // Data kategori ikon listrik
 final List<Map<String, dynamic>> _electricityIcons = [
-  {'icon': MdiIcons.lightbulbOutline, 'label': 'Lamps', 'id': 'CPT-ElectricPower-1'},
-  {'icon': MdiIcons.fridgeOutline, 'label': 'Refrigerator', 'id': 'CPT-ElectricPower-2'},
-  {'icon': MdiIcons.airConditioner, 'label': 'Air Conditioner', 'id': 'CPT-ElectricPower-3'},
-  {'icon': MdiIcons.television, 'label': 'Television', 'id': 'CPT-ElectricPower-4'},
-  {'icon': MdiIcons.washingMachine, 'label': 'Washing Machine', 'id': 'CPT-ElectricPower-5'},
+  {
+    'icon': MdiIcons.lightbulbOutline,
+    'label': 'Lamps',
+    'id': 'CPT-ElectricPower-1'
+  },
+  {
+    'icon': MdiIcons.fridgeOutline,
+    'label': 'Refrigerator',
+    'id': 'CPT-ElectricPower-2'
+  },
+  {
+    'icon': MdiIcons.airConditioner,
+    'label': 'Air Conditioner',
+    'id': 'CPT-ElectricPower-3'
+  },
+  {
+    'icon': MdiIcons.television,
+    'label': 'Television',
+    'id': 'CPT-ElectricPower-4'
+  },
+  {
+    'icon': MdiIcons.washingMachine,
+    'label': 'Washing Machine',
+    'id': 'CPT-ElectricPower-5'
+  },
 ];
