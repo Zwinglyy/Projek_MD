@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'transportation_page.dart';
 import 'electricity_page.dart';
 import 'package:emisi_md/api_service_.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class _CircleClipper extends CustomClipper<Path> {
   final double percentage;
@@ -56,7 +59,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         summaryData = data;
         isLoading = false;
-        _calculateCategoryPercentages();
+
       });
     } catch (e) {
       setState(() {
@@ -89,18 +92,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _calculateCategoryPercentages() {
-    if (summaryData != null) {
-      double totalEmissions = summaryData?['totalCarbonEmission'] ?? 1.0;
-      final categories = ['transportation', 'electricity'];
-      categories.forEach((category) {
-        (summaryData?[category] as Map<String, dynamic>?)
-            ?.forEach((key, value) {
-          categoryPercentages[key] = (value ?? 0.0) / totalEmissions * 100;
-        });
-      });
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +165,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          _buildSummaryCard(),
+          Article(),
         ],
       ),
     );
@@ -193,7 +185,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             title,
-            style: TextStyle(
+            style: GoogleFonts.poppins(
               fontSize: screenWidth < 600 ? 16 : 20,
               fontWeight: FontWeight.bold,
             ),
@@ -272,7 +264,7 @@ class _HomePageState extends State<HomePage> {
         Text(
           label,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: GoogleFonts.poppins(
             fontSize: screenWidth < 600 ? 12 : 14,
             fontWeight: FontWeight.w500,
           ),
@@ -280,13 +272,13 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(height: 4),
         Text(
           '${percentage.toStringAsFixed(1)}%',  // Tampilkan persentase
-          style: TextStyle(fontSize: 12, color: Colors.green.shade700),
+          style: GoogleFonts.poppins(fontSize: 12, color: Colors.green.shade700),
         ),
       ],
     );
   }
 
-  Widget _buildSummaryCard() {
+  Widget Article() {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
@@ -305,9 +297,9 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Total Carbon Footprint",
-            style: TextStyle(
+          Text(
+            "Article",
+            style: GoogleFonts.poppins(
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
@@ -315,44 +307,28 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text("Total Emission all Time", style: TextStyle(fontSize: 14)),
-              Text("(Total Emissions)", style: TextStyle(fontSize: 14)),
-            ],
-          ),
-          const SizedBox(height: 10),
-          isLoading
-              ? const CircularProgressIndicator()
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Total Emissions",
-                        style: TextStyle(fontSize: 14)),
-                    Text(
-                      summaryData?['totalCarbonEmission']?.toString() ?? 'N/A',
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ],
-                ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Total Distance", style: TextStyle(fontSize: 14)),
               Text(
-                summaryData?['totalDistance']?.toString() ?? 'N/A',
-                style: const TextStyle(fontSize: 14),
+                "Pengertian Carbon Emission",
+                style: GoogleFonts.poppins(fontSize: 14),
               ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text("Total Duration", style: TextStyle(fontSize: 14)),
-              Text(
-                summaryData?['totalDuration']?.toString() ?? 'N/A',
-                style: const TextStyle(fontSize: 14),
+              GestureDetector(
+                onTap: () async {
+                  const url = 'https://pgnlng.co.id/berita/wawasan/emisi-karbon/#:~:text=Pengertian%20Emisi%20Karbon&text=Dalam%20hal%20ini%2C%20emisi%20karbon,lepasnya%20gas%20CO2%20ke%20atmosfer.';
+                  if (await canLaunch(url)) {
+                    await launch(url);
+                  } else {
+                    throw 'Could not launch $url';
+                  }
+                },
+                child: Text(
+                  "Click Here",
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
               ),
             ],
           ),

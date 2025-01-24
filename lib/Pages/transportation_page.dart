@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:emisi_md/api_service_.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TransportationPage extends StatefulWidget {
   final String title;
@@ -81,7 +83,7 @@ class _TransportationPageState extends State<TransportationPage> {
           children: [
             Text(
               "How far did you travel today (in Kilometers) using ${widget.title}?",
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 16),
             TextField(
