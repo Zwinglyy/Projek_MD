@@ -4,12 +4,28 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   static const String baseUrl =
-      'https://script.google.com/macros/s/AKfycbyq0OmAJm75B7N52q-CW5zRxVMlgE1Vza8NPQiZDJbtXha7tEZ8znMXsufvUSy8uNbD/exec';
+      'https://script.google.com/macros/s/AKfycbzdnzqwAosaM7UmP0H4WW_Zquu4pxrR86ycq_MbPaRYqYpL7BgLZ2ZRgnlASseFBHcI/exec';
 
   static const String logoutUserAction = 'logoutUser';
 
-  Future<Map<String, dynamic>> percentageCPT(
+  Future<Map<String, dynamic>> getTotalCarbonEmission(
       {required String userId}) async {
+    try {
+      final response =
+          await http.get(Uri.parse(baseUrl).replace(queryParameters: {
+        'action': 'getTotalCarbonEmission',
+        'userId': userId,
+      }));
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+      throw Exception('Failed to fetch total carbon emission data');
+    } catch (error) {
+      return {'status': 'FAILED', 'msg': error.toString()};
+    }
+  }
+
+  Future<Map<String, dynamic>> percentageCPT({required String userId}) async {
     try {
       final response =
           await http.get(Uri.parse(baseUrl).replace(queryParameters: {
